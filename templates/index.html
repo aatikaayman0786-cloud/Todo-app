@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do List</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="todo-container">
+        <h1>My To-Do List</h1>
+        <p class="subtitle">Plan your day, one task at a time.</p>
+
+        <form action="/add" method="POST" class="add-form">
+            <input
+                type="text"
+                name="title"
+                placeholder="Enter a new task..."
+                maxlength="200"
+                required
+            >
+            <button type="submit" class="add-btn">Add</button>
+        </form>
+
+        <h2>My Tasks</h2>
+
+        <ul class="task-list">
+            {% for task in tasks %}
+                <li class="task-item">
+                    <form action="/toggle/{{ task.id }}" method="POST">
+                        <button type="submit" class="check-btn"
+                                aria-label="Toggle task completion">
+                            {% if task.completed %}
+                                ✓
+                            {% else %}
+                                ○
+                            {% endif %}
+                        </button>
+                    </form>
+
+                    <span class="task-title
+                        {% if task.completed %}completed{% endif %}">
+                        {{ task.title }}
+                    </span>
+
+                    <form action="/delete/{{ task.id }}" method="POST">
+                        <button type="submit" class="delete-btn"
+                                aria-label="Delete task">×</button>
+                    </form>
+                </li>
+            {% else %}
+                <li class="empty-message">
+                    No tasks yet. Add your first task!
+                </li>
+            {% endfor %}
+        </ul>
+
+        <p class="footer">Stay focused. Keep going!</p>
+    </div>
+
+</body>
+</html>
